@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Main {
+public class httpc {
 
     public static void main(String[] args) {
         int server_port = 8080; // Defines at which port the server will be listening at
