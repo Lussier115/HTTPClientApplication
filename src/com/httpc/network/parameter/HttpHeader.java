@@ -1,0 +1,39 @@
+package com.httpc.network.parameter;
+
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class HttpHeader {
+    private HashMap<String, String> _entries = new HashMap<>();
+
+    public void parseLine(String headerLine) {
+        Pattern headerReg = Pattern.compile("([\\w-]+)\\s*:\\s*(.+)");
+        Matcher regMatcher = headerReg.matcher(headerLine);
+
+        if (regMatcher.find()) {
+            String key = regMatcher.group(1);
+            if (!_entries.containsKey(key))
+                _entries.remove(key);
+
+            _entries.put(key, regMatcher.group(2));
+        }
+    }
+
+    public boolean isValid() {
+        return true;
+    }
+
+    public HashMap<String, String> GetEntries() {
+        return _entries;
+    }
+
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        _entries.forEach((key, value) -> stringBuilder.append(key).append(": ").append(value).append("\r\n"));
+
+        return stringBuilder.toString();
+    }
+
+
+}

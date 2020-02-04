@@ -1,22 +1,21 @@
-package com.httpc.network;
-
-import com.httpc.network.header.RequestHeader;
+package com.httpc.network.response;
 
 public class Response {
 
     private String version;
     private int statusCode;
     private int phrase;
-    private RequestHeader header;
+    private String[] headers;
 
     public Response() {
+
     }
 
-    public Response(String version, int statusCode, int phrase, RequestHeader header) {
+    public Response(String version, int statusCode, int phrase, String[] header) {
         this.version = version;
         this.statusCode = statusCode;
         this.phrase = phrase;
-        this.header = header;
+        this.headers = header;
     }
 
     public String getVersion() {
@@ -43,11 +42,11 @@ public class Response {
         this.phrase = phrase;
     }
 
-    public RequestHeader getHeader() {
-        return header;
+    public String[] getHeader() {
+        return headers;
     }
 
-    public void setHeader(RequestHeader header) {
-        this.header = header;
+    public void setHeader(String[] header) {
+        this.headers = header;
     }
 }

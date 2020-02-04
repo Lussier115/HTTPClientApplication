@@ -1,6 +1,6 @@
 package com.httpc.network.parameter;
 
-public class StatusCode {
+public class HttpStatusCode {
 
     public static final int OK = 200;
     public static final int NotFound = 404;
