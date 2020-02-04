@@ -4,30 +4,28 @@ package com.httpc.network.request;
 import com.httpc.network.parameter.HttpBody;
 import com.httpc.network.parameter.HttpHeader;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class Request {
 
-    private String version = "HTTP/1.0";
+    protected String version = "HTTP/1.0";
+    protected String url;
+    protected String host;
+    protected RequestType requestType;
+    protected HttpBody body;
+    protected HttpHeader headers;
 
-    private String url;
-    private int port;
-    private RequestType requestType;
-    private HttpBody body;
-    private HttpHeader headers;
-
+    private boolean verbos;
 
     public enum RequestType {POST, GET}
 
     public Request() {
-        this.url = url;
-        this.port = port;
     }
 
-    public Request(String version, String url, int port, HttpHeader headers, RequestType requestType, HttpBody body) {
-        this.version = version;
+    public Request(RequestType requestType, HttpHeader headers, HttpBody body, String url) {
         this.url = url;
-        this.port = port;
         this.requestType = requestType;
-
         this.headers = headers;
         this.body = body;
     }
@@ -39,19 +37,16 @@ public class Request {
         if (requestType.equals(requestType.POST)) {
             return body.isValid();
         }
+
         if (!headers.isValid()) {
             return false;
         }
+
         return true;
     }
 
     public String toString() {
-        String request = requestType.toString() + url + version + "\r\n"
-                + headers.toString()
-                + body.getContentLength()
-                + "\r\n"
-                + body;
-
+        String request = requestType.toString() + url + version + "\r\n";
         return request;
     }
 
@@ -62,14 +57,6 @@ public class Request {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
     }
 
     public HttpHeader getHeader() {
@@ -88,5 +75,39 @@ public class Request {
         this.requestType = requestType;
     }
 
+    public boolean isVerbos() {
+        return verbos;
+    }
 
+    public void setVerbos(boolean verbos) {
+        this.verbos = verbos;
+    }
+
+    protected void parseRequest(String[] args) {
+        this.headers = new HttpHeader();
+
+        for (int i = 1; i < args.length; i++) {
+            if (args[i].equals("-h")) {
+                String content = args[i + 1];
+                this.headers.parseLine(content);
+
+            } else if (args[i].equals("-v")) {
+                this.setVerbos(true);
+            } else if (i == (args.length -1)) {
+                try {
+                    URL url = new URL(args[i]);
+                    this.host = url.getHost();
+                    this.url = args[i];
+
+                } catch (MalformedURLException e) {
+                    // it wasn't a URL
+                }
+
+            }
+        }
+    }
+
+    public String getHost() {
+        return this.host;
+    }
 }

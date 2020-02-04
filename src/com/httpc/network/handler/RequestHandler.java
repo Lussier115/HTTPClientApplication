@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import java.net.InetAddress;
+import java.util.Scanner;
 
 public class RequestHandler {
 
@@ -21,28 +22,23 @@ public class RequestHandler {
             throw new Exception();
 
         // Open Socket
-        InetAddress addressIp = InetAddress.getByName(request.getUrl());
+        InetAddress addressIp = InetAddress.getByName(request.getHost());
         Socket socket = new Socket(addressIp, PORT);
 
         PrintWriter out = new PrintWriter(socket.getOutputStream());
-        InputStream in = socket.getInputStream();
+        Scanner in = new Scanner(socket.getInputStream());
 
         // Send request
         out.write(request.toString());
         out.flush();
 
         // Read entire answer
-        StringBuilder res = new StringBuilder();
-        int data = in.read();
-        while(data != -1) {
-            res.append((char) data);
-            data = in.read();
+        while(in.hasNextLine()) {
+            System.out.println(in.nextLine());
         }
 
         out.close();
         in.close();
         socket.close();
-
-        System.out.println(res.toString());
     }
 }

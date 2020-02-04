@@ -1,36 +1,33 @@
 package com.httpc.network.parameter;
 
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class HttpHeader {
-    private HashMap<String, String> _entries = new HashMap<>();
+    private HashMap<String, String> headers = new HashMap<>();
+    private boolean isValid = true;
 
-    public void parseLine(String headerLine) {
-        Pattern headerReg = Pattern.compile("([\\w-]+)\\s*:\\s*(.+)");
-        Matcher regMatcher = headerReg.matcher(headerLine);
+    public void parseLine(String header) {
+        String[] entries = header.split(":");
 
-        if (regMatcher.find()) {
-            String key = regMatcher.group(1);
-            if (!_entries.containsKey(key))
-                _entries.remove(key);
-
-            _entries.put(key, regMatcher.group(2));
+        if (entries.length == 2) {
+            this.headers.put(entries[0], entries[1]);
+        } else {
+            //Header is invalid
+            this.isValid = false;
         }
     }
 
     public boolean isValid() {
-        return true;
+        return isValid;
     }
 
-    public HashMap<String, String> GetEntries() {
-        return _entries;
+    public HashMap<String, String> GetHeaders() {
+        return headers;
     }
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        _entries.forEach((key, value) -> stringBuilder.append(key).append(": ").append(value).append("\r\n"));
+        headers.forEach((key, value) -> stringBuilder.append(key).append(": ").append(value).append("\r\n"));
 
         return stringBuilder.toString();
     }

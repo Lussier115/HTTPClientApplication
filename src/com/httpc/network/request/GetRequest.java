@@ -1,15 +1,16 @@
 package com.httpc.network.request;
 
-import com.httpc.network.parameter.HttpBody;
-import com.httpc.network.parameter.HttpHeader;
+public class GetRequest extends Request {
 
-public class GetRequest extends Request{
-
-    public GetRequest() {
-        super();
+    public GetRequest(String[] args) {
+        this.setRequestType(RequestType.GET);
+        this.parseRequest(args);
     }
 
-    public GetRequest(String version, String url, int port, HttpHeader headers, RequestType requestType, HttpBody body) {
-        super(version, url, port, headers, requestType, body);
+    @Override
+    public String toString() {
+        String request = requestType.toString() + " "+ url+  " "+ version + "\r\n" + this.headers.toString()+ "\r\n";
+
+        return request;
     }
 }
