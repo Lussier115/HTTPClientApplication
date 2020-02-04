@@ -2,7 +2,6 @@ package com.httpc;
 
 import com.httpc.network.exception.InvalidRequestException;
 import com.httpc.network.handler.RequestHandler;
-import com.httpc.network.parameter.HttpHeader;
 import com.httpc.network.request.GetRequest;
 import com.httpc.network.request.PostRequest;
 import com.httpc.network.request.Request;

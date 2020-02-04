@@ -113,11 +113,17 @@ public class Request {
                 //TODO :: handle -d on POST, Throw InvalidRequestException if -d or -f already exists
             }
 
+            // Should be the last parameter of the curl
             if (i == (args.length - 1)) {
                 try {
-                    URL url = new URL(args[i]);
+                    String tempURL = args[i];
+                    if(tempURL.startsWith("www")){
+                      tempURL = "http://".concat(tempURL);
+                    }
+
+                    URL url = new URL(tempURL);
                     this.host = url.getHost();
-                    this.url = args[i];
+                    this.url = tempURL;
 
                 } catch (MalformedURLException e) {
                     // it wasn't a URL
