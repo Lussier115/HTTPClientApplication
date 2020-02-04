@@ -1,6 +1,7 @@
 package com.httpc.network.request;
 
 
+import com.httpc.network.exception.InvalidRequestException;
 import com.httpc.network.parameter.HttpBody;
 import com.httpc.network.parameter.HttpHeader;
 
@@ -83,17 +84,25 @@ public class Request {
         this.verbos = verbos;
     }
 
-    protected void parseRequest(String[] args) {
+    protected void parseRequest(String[] args) throws InvalidRequestException {
         this.headers = new HttpHeader();
 
         for (int i = 1; i < args.length; i++) {
+
+            if (requestType == RequestType.GET) {
+                if (args[i].equals("-d") || args[i].equals("-f")) {
+                    throw new InvalidRequestException("Cannot contain -d or -f");
+                }
+            }
+
+
             if (args[i].equals("-h")) {
                 String content = args[i + 1];
                 this.headers.parseLine(content);
 
             } else if (args[i].equals("-v")) {
                 this.setVerbos(true);
-            } else if (i == (args.length -1)) {
+            } else if (i == (args.length - 1)) {
                 try {
                     URL url = new URL(args[i]);
                     this.host = url.getHost();
