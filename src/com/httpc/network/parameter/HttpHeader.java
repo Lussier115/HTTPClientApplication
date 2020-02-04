@@ -21,6 +21,10 @@ public class HttpHeader {
         return isValid;
     }
 
+    public boolean contains(String value) {
+        return this.headers.containsKey(value);
+    }
+
     public HashMap<String, String> GetHeaders() {
         return headers;
     }

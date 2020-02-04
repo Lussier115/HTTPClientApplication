@@ -17,7 +17,7 @@ public class Request {
     protected HttpBody body;
     protected HttpHeader headers;
 
-    private boolean verbos;
+    private boolean verbose;
 
     public enum RequestType {POST, GET}
 
@@ -76,12 +76,12 @@ public class Request {
         this.requestType = requestType;
     }
 
-    public boolean isVerbos() {
-        return verbos;
+    public boolean isVerbose() {
+        return verbose;
     }
 
-    public void setVerbos(boolean verbos) {
-        this.verbos = verbos;
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
     }
 
     protected void parseRequest(String[] args) throws InvalidRequestException {
@@ -95,14 +95,25 @@ public class Request {
                 }
             }
 
-
             if (args[i].equals("-h")) {
                 String content = args[i + 1];
                 this.headers.parseLine(content);
+            }
 
-            } else if (args[i].equals("-v")) {
-                this.setVerbos(true);
-            } else if (i == (args.length - 1)) {
+            if (args[i].equals("-v")) {
+                this.setVerbose(true);
+            }
+
+
+            if (args[i].equals("-f")) {
+                //TODO :: handle -f on POST, Throw InvalidRequestException if -d or -f already exists
+            }
+
+            if (args[i].equals("-d")) {
+                //TODO :: handle -d on POST, Throw InvalidRequestException if -d or -f already exists
+            }
+
+            if (i == (args.length - 1)) {
                 try {
                     URL url = new URL(args[i]);
                     this.host = url.getHost();
