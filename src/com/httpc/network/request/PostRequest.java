@@ -20,7 +20,12 @@ public class PostRequest extends Request {
             }
 
             if (args[i].equals("-d")) {
-                String query = Arrays.toString(args).replaceAll(",", " ").replaceAll("([A-Za-z]\\w+)", "\"$1\"");
+
+                StringBuilder builder = new StringBuilder();
+                for (String value : args) {
+                    builder.append(value);
+                }
+                String query = builder.toString().replaceAll("([A-Za-z]\\w+)", "\"$1\"");
                 int startIndex = query.indexOf("{");
                 int lastIndex = query.lastIndexOf("}");
 
@@ -36,8 +41,7 @@ public class PostRequest extends Request {
     @Override
     public String toString() {
         String request = requestType.toString() + " " + this.url + " " + this.version +
-                "\r\n" + this.headers.toString() + body.toString() +
-                "\r\n";
+                "\r\n" + this.headers.toString() + body.toString();
 
         return request;
     }
