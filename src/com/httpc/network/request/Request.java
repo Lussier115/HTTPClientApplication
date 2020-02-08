@@ -92,6 +92,7 @@ public class Request {
             if (i == (args.length - 1)) {
                 try {
                     String tempURL = args[i];
+
                     if (tempURL.startsWith("www")) {
                         tempURL = "http://".concat(tempURL);
                     }
