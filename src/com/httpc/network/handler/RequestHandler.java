@@ -3,7 +3,6 @@ package com.httpc.network.handler;
 import com.httpc.network.request.Request;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -33,7 +32,7 @@ public class RequestHandler {
         out.flush();
 
         // Read entire answer
-        while(in.hasNextLine()) {
+        while (in.hasNextLine()) {
             System.out.println(in.nextLine());
         }
 

@@ -35,9 +35,6 @@ public class Request {
         if (requestType == null) {
             return false;
         }
-        if (requestType.equals(requestType.POST)) {
-            return body.isValid();
-        }
 
         if (!headers.isValid()) {
             return false;
@@ -89,12 +86,6 @@ public class Request {
 
         for (int i = 1; i < args.length; i++) {
 
-            if (requestType == RequestType.GET) {
-                if (args[i].equals("-d") || args[i].equals("-f")) {
-                    throw new InvalidRequestException("Cannot contain -d or -f");
-                }
-            }
-
             if (args[i].equals("-h")) {
                 String content = args[i + 1];
                 this.headers.parseLine(content);
@@ -104,21 +95,12 @@ public class Request {
                 this.setVerbose(true);
             }
 
-
-            if (args[i].equals("-f")) {
-                //TODO :: handle -f on POST, Throw InvalidRequestException if -d or -f already exists
-            }
-
-            if (args[i].equals("-d")) {
-                //TODO :: handle -d on POST, Throw InvalidRequestException if -d or -f already exists
-            }
-
             // Should be the last parameter of the curl
             if (i == (args.length - 1)) {
                 try {
                     String tempURL = args[i];
-                    if(tempURL.startsWith("www")){
-                      tempURL = "http://".concat(tempURL);
+                    if (tempURL.startsWith("www")) {
+                        tempURL = "http://".concat(tempURL);
                     }
 
                     URL url = new URL(tempURL);
@@ -131,6 +113,8 @@ public class Request {
 
             }
         }
+
+        System.out.println("Request Object Created");
     }
 
     public String getHost() {
