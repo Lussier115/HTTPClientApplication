@@ -2,13 +2,17 @@ package com.httpc.network.request;
 
 import com.httpc.network.exception.InvalidRequestException;
 import com.httpc.network.parameter.HttpBody;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 
 public class PostRequest extends Request {
 
     private HttpBody body;
+    private boolean hasF = false;
+    private boolean hasD = false;
 
     public PostRequest(String[] args) throws InvalidRequestException {
         this.setRequestType(RequestType.POST);
@@ -16,15 +20,18 @@ public class PostRequest extends Request {
         for (int i = 1; i < args.length; i++) {
 
             if (args[i].equals("-f")) {
-                //TODO :: handle -f on POST, Throw InvalidRequestException if -d or -f already exists
+                hasF = true;
+                body = new HttpBody(getFileData(args[i + 1]), HttpBody.BodyType.FILE);
             }
 
             if (args[i].equals("-d")) {
+                hasD = true;
 
                 StringBuilder builder = new StringBuilder();
                 for (String value : args) {
                     builder.append(value);
                 }
+
                 String query = builder.toString().replaceAll("([A-Za-z]\\w+)", "\"$1\"");
                 int startIndex = query.indexOf("{");
                 int lastIndex = query.lastIndexOf("}");
@@ -32,6 +39,10 @@ public class PostRequest extends Request {
                 String content = query.substring(startIndex + 1, lastIndex);
 
                 body = new HttpBody(content, HttpBody.BodyType.INLINE);
+            }
+
+            if (hasD && hasF) {
+                throw new InvalidRequestException("Cannot contain both -d and -f");
             }
         }
 
@@ -44,5 +55,23 @@ public class PostRequest extends Request {
                 "\r\n" + this.headers.toString() + body.toString();
 
         return request;
+    }
+
+    private String getFileData(String filePath) {
+        String data = "";
+
+        try {
+            File fileObj = new File(filePath.replaceAll("'", ""));
+            Scanner myReader = new Scanner(fileObj);
+            while (myReader.hasNextLine()) {
+                data += myReader.nextLine() + "\n";
+            }
+
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return data;
     }
 }

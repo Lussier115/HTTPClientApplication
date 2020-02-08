@@ -24,13 +24,6 @@ public class Request {
     public Request() {
     }
 
-    public Request(RequestType requestType, HttpHeader headers, HttpBody body, String url) {
-        this.url = url;
-        this.requestType = requestType;
-        this.headers = headers;
-        this.body = body;
-    }
-
     public boolean isValid() {
         if (requestType == null) {
             return false;
@@ -113,8 +106,6 @@ public class Request {
 
             }
         }
-
-        System.out.println("Request Object Created");
     }
 
     public String getHost() {
