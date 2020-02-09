@@ -4,8 +4,8 @@ import com.httpc.network.exception.InvalidRequestException;
 
 public class GetRequest extends Request {
 
-    public GetRequest(String[] args) throws InvalidRequestException {
-        this.setRequestType(RequestType.GET);
+    public GetRequest(String[] args, RequestType requestType) throws InvalidRequestException {
+        this.setRequestType(requestType);
 
         for (int i = 1; i < args.length; i++) {
 

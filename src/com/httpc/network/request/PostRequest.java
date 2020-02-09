@@ -14,8 +14,8 @@ public class PostRequest extends Request {
     private boolean hasF = false;
     private boolean hasD = false;
 
-    public PostRequest(String[] args) throws InvalidRequestException {
-        this.setRequestType(RequestType.POST);
+    public PostRequest(String[] args, RequestType requestType) throws InvalidRequestException {
+        this.setRequestType(requestType);
 
         for (int i = 1; i < args.length; i++) {
 

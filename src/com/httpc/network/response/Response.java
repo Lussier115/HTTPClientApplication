@@ -11,7 +11,7 @@ public class Response {
     private boolean verbose;
 
     public Response(Scanner in, boolean verbose) {
-        // Read entire answer
+
         boolean isHeaderContent = true;
 
         while (in.hasNextLine()) {
@@ -24,7 +24,9 @@ public class Response {
                 this.headers.add(content);
             }
             if (!isHeaderContent) {
-                this.body.add(content);
+                if (content.length() > 1) {
+                    this.body.add(content);
+                }
             }
         }
 
@@ -32,10 +34,13 @@ public class Response {
     }
 
     public void display() {
+        System.out.print("\r\n");
+
         if (this.verbose) {
             for (String content : headers) {
                 System.out.println(content);
             }
+            System.out.print("\r\n\r\n");
         }
 
         for (String content : body) {

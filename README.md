@@ -6,6 +6,14 @@ William-Andrew Lussier (40033412)
 
 ## Tested Curl Commands
 
+#### HELP
+
+`help`
+
+`help post`
+
+`help get`
+
 #### GET
 `
 GET http://httpbin.org/get?course=networking&assignment=1 
