@@ -21,20 +21,10 @@ public class HttpHeader {
         return isValid;
     }
 
-    public boolean contains(String value) {
-        return this.headers.containsKey(value);
-    }
-
-    public HashMap<String, String> GetHeaders() {
-        return headers;
-    }
-
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         headers.forEach((key, value) -> stringBuilder.append(key).append(": ").append(value).append("\r\n"));
 
         return stringBuilder.toString();
     }
-
-
 }

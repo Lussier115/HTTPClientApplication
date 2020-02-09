@@ -3,7 +3,6 @@ package com.httpc.network.response;
 import com.httpc.network.exception.RedirectException;
 import com.httpc.network.request.Request;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;

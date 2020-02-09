@@ -41,25 +41,8 @@ public class Request {
         return request;
     }
 
-
-    public String getUrl() {
-        return url;
-    }
-
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public HttpHeader getHeader() {
-        return headers;
-    }
-
-    public void setHeader(HttpHeader httpHeader) {
-        this.headers = httpHeader;
-    }
-
-    public RequestType getRequestType() {
-        return requestType;
     }
 
     public void setRequestType(RequestType requestType) {
@@ -76,10 +59,6 @@ public class Request {
 
     public boolean isFileOutput() {
         return fileOutput;
-    }
-
-    public void setFileOutput(boolean fileOutput) {
-        this.fileOutput = fileOutput;
     }
 
     public String getOutputLocation() {

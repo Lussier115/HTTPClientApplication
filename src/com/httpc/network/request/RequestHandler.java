@@ -1,14 +1,11 @@
 package com.httpc.network.request;
 
 import com.httpc.network.exception.RedirectException;
-import com.httpc.network.request.Request;
 import com.httpc.network.response.Response;
 
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.Socket;
-
 import java.net.InetAddress;
+import java.net.Socket;
 import java.util.Scanner;
 
 public class RequestHandler {
