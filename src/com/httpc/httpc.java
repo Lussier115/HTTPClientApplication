@@ -1,10 +1,11 @@
 package com.httpc;
 
 import com.httpc.network.exception.InvalidRequestException;
-import com.httpc.network.handler.RequestHandler;
+import com.httpc.network.request.RequestHandler;
 import com.httpc.network.request.GetRequest;
 import com.httpc.network.request.PostRequest;
 import com.httpc.network.request.Request;
+import com.httpc.network.response.Response;
 
 public class httpc {
 
@@ -20,7 +21,9 @@ public class httpc {
             }
 
             if (request != null) {
-                requestHandler.send(request);
+                Response response = requestHandler.send(request);
+
+                response.display();
             }
         } catch (InvalidRequestException e) {
             System.out.println(e.toString());

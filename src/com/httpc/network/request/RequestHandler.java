@@ -1,6 +1,7 @@
-package com.httpc.network.handler;
+package com.httpc.network.request;
 
 import com.httpc.network.request.Request;
+import com.httpc.network.response.Response;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,7 +17,7 @@ public class RequestHandler {
     public RequestHandler() {
     }
 
-    public void send(Request request) throws Exception, IOException {
+    public Response send(Request request) throws Exception, IOException {
         if (!request.isValid())
             throw new Exception();
 
@@ -31,13 +32,12 @@ public class RequestHandler {
         out.write(request.toString());
         out.flush();
 
-        // Read entire answer
-        while (in.hasNextLine()) {
-            System.out.println(in.nextLine());
-        }
+        Response response = new Response(in, request.isVerbose());
 
         out.close();
         in.close();
         socket.close();
+
+        return response;
     }
 }
