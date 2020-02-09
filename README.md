@@ -1,10 +1,12 @@
 HTTPClientApplication
+
 ## Students
-William-Andrew Lussier (40033412)
+
+- William-Andrew Lussier (40033412)
+- Anthony Le (40001837)
 
 
-
-## Tested Curl Commands
+## Tested Commands
 
 #### HELP
 
