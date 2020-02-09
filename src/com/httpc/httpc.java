@@ -9,10 +9,9 @@ import com.httpc.network.request.Request.RequestType;
 import com.httpc.network.response.Response;
 
 public class httpc {
-
     public static void main(String[] args) {
-        RequestHandler requestHandler = new RequestHandler();
         Request request = null;
+        RequestHandler requestHandler = new RequestHandler();
         RequestType requestType = null;
 
         try {
@@ -45,6 +44,7 @@ public class httpc {
             /**
              * Send Request
              */
+
             if (request != null) {
                 Response response = requestHandler.send(request);
                 response.display();

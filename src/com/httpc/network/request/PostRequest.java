@@ -16,6 +16,7 @@ public class PostRequest extends Request {
 
     public PostRequest(String[] args, RequestType requestType) throws InvalidRequestException {
         this.setRequestType(requestType);
+        body = new HttpBody("", HttpBody.BodyType.INLINE);
 
         for (int i = 1; i < args.length; i++) {
 

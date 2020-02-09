@@ -1,5 +1,6 @@
 package com.httpc.network.request;
 
+import com.httpc.network.exception.RedirectException;
 import com.httpc.network.request.Request;
 import com.httpc.network.response.Response;
 
@@ -13,11 +14,13 @@ import java.util.Scanner;
 public class RequestHandler {
 
     private final int PORT = 80;
+    private static Response response;
 
     public RequestHandler() {
     }
 
     public Response send(Request request) throws Exception {
+
         if (!request.isValid())
             throw new Exception();
 
@@ -32,7 +35,12 @@ public class RequestHandler {
         out.write(request.toString());
         out.flush();
 
-        Response response = new Response(in, request.isVerbose());
+        try {
+            response = new Response(in, request);
+        } catch (RedirectException e) {
+            request.setUrl(e.getRedirectURL());
+            this.send(request);
+        }
 
         out.close();
         in.close();
