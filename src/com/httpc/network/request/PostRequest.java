@@ -26,19 +26,7 @@ public class PostRequest extends Request {
 
             if (args[i].equals("-d")) {
                 hasD = true;
-
-                StringBuilder builder = new StringBuilder();
-                for (String value : args) {
-                    builder.append(value);
-                }
-
-                String query = builder.toString().replaceAll("([A-Za-z]\\w+)", "\"$1\"");
-                int startIndex = query.indexOf("{");
-                int lastIndex = query.lastIndexOf("}");
-
-                String content = query.substring(startIndex + 1, lastIndex);
-
-                body = new HttpBody(content, HttpBody.BodyType.INLINE);
+                body = new HttpBody(getInlineData(args), HttpBody.BodyType.INLINE);
             }
 
             if (hasD && hasF) {
@@ -55,6 +43,21 @@ public class PostRequest extends Request {
                 "\r\n" + this.headers.toString() + body.toString();
 
         return request;
+    }
+
+    private String getInlineData(String[] args) {
+        String data = "";
+
+        StringBuilder builder = new StringBuilder();
+        for (String value : args) {
+            builder.append(value);
+        }
+
+        String query = builder.toString().replaceAll("([A-Za-z]\\w+)", "\"$1\"");
+        int startIndex = query.indexOf("{");
+        int lastIndex = query.lastIndexOf("}");
+
+        return query.substring(startIndex + 1, lastIndex);
     }
 
     private String getFileData(String filePath) {
