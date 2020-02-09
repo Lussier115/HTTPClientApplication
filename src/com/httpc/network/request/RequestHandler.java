@@ -17,7 +17,7 @@ public class RequestHandler {
     public RequestHandler() {
     }
 
-    public Response send(Request request) throws Exception, IOException {
+    public Response send(Request request) throws Exception {
         if (!request.isValid())
             throw new Exception();
 

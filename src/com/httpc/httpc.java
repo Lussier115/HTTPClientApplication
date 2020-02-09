@@ -51,15 +51,24 @@ public class httpc {
             }
 
         } catch (InvalidRequestException e) {
-            if (requestType == RequestType.GET) {
-                help("get");
-            }
 
             if (requestType == RequestType.GET) {
+                help("get");
+            } else if (requestType == RequestType.POST) {
                 help("post");
             }
+
         } catch (Exception e2) {
-            help("help");
+
+            System.out.println("Error: Invalid Request");
+
+            if (requestType == RequestType.GET) {
+                help("get");
+            } else if (requestType == RequestType.POST) {
+                help("post");
+            } else {
+                help("help");
+            }
         }
     }
 
