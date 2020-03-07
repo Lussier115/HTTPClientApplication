@@ -84,7 +84,7 @@ public class httpfs {
                         System.out.println(lineReader);
 
                     } else {
-                        if(verbose){
+                        if (verbose) {
                             System.out.println(lineReader);
                         }
 
@@ -142,7 +142,7 @@ public class httpfs {
                 content += fileNames[i].getName() + "\n";
             }
 
-            writer.write(CODE_OK + headers +"\r\n" + content);
+            writer.write(CODE_OK + headers + "\r\n" + content);
             writer.flush();
 
         } catch (IOException e) {
@@ -155,13 +155,13 @@ public class httpfs {
 
         try {
             if (file.contains("//")) {
-                writer.write(CODE_BAD_REQUEST + headers +"\r\n");
+                writer.write(CODE_BAD_REQUEST + headers + "\r\n");
                 writer.flush();
             } else {
                 try {
                     File fileName = new File(MAINPATH + file);
 
-                    if(fileName.canRead()){
+                    if (fileName.canRead()) {
                         FileReader fileReader = new FileReader(fileName);
                         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
@@ -179,14 +179,18 @@ public class httpfs {
                         writer.write(fileRead);
                         fileReader.close();
                         bufferedReader.close();
+
                     } else {
-                        writer.write(CODE_FORBIDDEN + headers +"\r\n");
+                        if (fileName.exists()) {
+                            writer.write(CODE_FORBIDDEN + headers + "\r\n");
+                        } else
+                            throw new FileNotFoundException();
                     }
 
                     writer.flush();
 
                 } catch (FileNotFoundException e) {
-                    writer.write(CODE_NOT_FOUND + headers +"\r\n");
+                    writer.write(CODE_NOT_FOUND + headers + "\r\n");
                     writer.flush();
                 }
             }
