@@ -15,6 +15,7 @@ public class httpfs {
     private ServerSocket client;
     private String filePath;
     private String headers = "";
+    private int postContentLength = 0;
 
     private final String CODE_OK = "HTTP/1.0 200 OK\n";
     private final String CODE_NOT_FOUND = "HTTP/1.0 404 Not Found\n";
@@ -88,7 +89,11 @@ public class httpfs {
                             System.out.println(lineReader);
                         }
 
-                        headers += lineReader + "\n";
+                        if (lineReader.toLowerCase().contains("content-length:")) {
+                            postContentLength = Integer.parseInt(lineReader.split(":")[1].trim());
+                        } else {
+                            headers += lineReader + "\n";
+                        }
                     }
 
                     index++;
@@ -199,22 +204,36 @@ public class httpfs {
         }
     }
 
-    private void postFile(String file, Writer writer, BufferedReader reader) {
+    private void postFile(String fileLocation, Writer writer, BufferedReader reader) {
 
         try {
-            File fileName = new File(MAINPATH + file);
-            FileWriter newFile = new FileWriter(MAINPATH + file);
+            File file = new File(MAINPATH + fileLocation);
 
-            int length = HttpReader.readContentLength(fileName);
-
-            String line = reader.readLine();
-            while (!line.isEmpty()) {
-                line = reader.readLine();
-                char[] fileToWrite = new char[length];
-                newFile.write(fileToWrite);
+            if (!file.exists()) {
+                String directory = file.getParent();
+                File directoryX = new File(directory);
+                directoryX.mkdirs();
+                file = new File(MAINPATH + fileLocation);
             }
 
-            writer.write(CODE_CREATED + headers + "\r\n");
+            FileWriter newFile = new FileWriter(MAINPATH + fileLocation);
+
+            StringBuilder payload = new StringBuilder();
+            while (reader.ready()) {
+                payload.append((char) reader.read());
+            }
+
+            String data = payload.toString().replaceAll("\"", "").replaceAll("\\{", "").replaceAll("\\}", "");
+
+            System.out.println("Data is: " + data);
+
+            newFile.write(data);
+
+            int length = HttpReader.readContentLength(file);
+            String contentType = HttpReader.readContentType(fileLocation);
+
+            writer.write(CODE_CREATED + "Content-Length: " + length + "\nContent-Type: " + contentType + "\n\r\n");
+
 
             writer.flush();
             reader.close();

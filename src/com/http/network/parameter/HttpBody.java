@@ -16,6 +16,8 @@ public class HttpBody {
         return this.getContentLength() + "\r\n" + this.getBody();
     }
 
+    public String fsToString() { return this.getContentLength() + this.getBody(); }
+
     public String getContentLength() {
         return "Content-Length: " + this.getBody().length() + "\r\n";
     }
