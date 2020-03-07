@@ -1,8 +1,6 @@
 package com.http.httpfs;
 
-import com.http.network.exception.InvalidRequestException;
 import com.http.network.file.HttpReader;
-import com.http.network.request.Request;
 
 import java.io.*;
 import java.net.*;
