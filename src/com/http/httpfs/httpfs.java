@@ -13,14 +13,14 @@ public class httpfs {
     private static boolean verbose = false; //TODO
 
     private ServerSocket client;
-    private HttpReader httpReader;
     private String filePath;
+    private String headers = "";
 
-    private final String CODE_OK = "HTTP/1.0 200 OK \r\n";
-    private final String CODE_NOT_FOUND = "HTTP/1.0 404 Not Found \r\n";
-    private final String CODE_CREATED = "HTTP/1.0 201 Created \r\n";
-    private final String CODE_BAD_REQUEST = "HTTP/1.0 400 Bad Request \r\n";
-    private final String CODE_FORBIDDEN = "HTTP/1.0 403 Forbidden \r\n";
+    private final String CODE_OK = "HTTP/1.0 200 OK\n";
+    private final String CODE_NOT_FOUND = "HTTP/1.0 404 Not Found\n";
+    private final String CODE_CREATED = "HTTP/1.0 201 Created\n";
+    private final String CODE_BAD_REQUEST = "HTTP/1.0 400 Bad Request\n";
+    private final String CODE_FORBIDDEN = "HTTP/1.0 403 Forbidden\n";
 
     public static void main(String[] args) throws IOException {
 
@@ -72,8 +72,30 @@ public class httpfs {
                 OutputStream os = socket.getOutputStream();
                 Writer writer = new BufferedWriter(new OutputStreamWriter(os));
 
-                String lineReader = reader.readLine();
-                String[] line = lineReader.split(" ");
+                String lineReader;
+                String content = "";
+                int index = 0;
+                headers = "";
+
+                while ((lineReader = reader.readLine()).length() > 0) {
+
+                    if (index == 0) {
+                        content += lineReader;
+                        System.out.println(lineReader);
+
+                    } else {
+                        if(verbose){
+                            System.out.println(lineReader);
+                        }
+
+                        headers += lineReader + "\n";
+                    }
+
+                    index++;
+                }
+
+
+                String[] line = content.split(" ");
 
                 try {
 
@@ -114,54 +136,57 @@ public class httpfs {
             File[] fileNames = directory.listFiles();
 
             String content = "";
-            writer.write(CODE_OK + "\r\n");
-            writer.write(CODE_OK);
+
 
             for (int i = 0; i < fileNames.length; i++) {
-                content += fileNames[i].getName() + "\r\n";
+                content += fileNames[i].getName() + "\n";
             }
 
-            writer.write(content);
+            writer.write(CODE_OK + headers +"\r\n" + content);
             writer.flush();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void readFile(String file, Writer writer) {
+        String respone = "";
+
         try {
             if (file.contains("//")) {
-                writer.write(CODE_BAD_REQUEST + "\r\n");
-                writer.write(CODE_BAD_REQUEST);
+                writer.write(CODE_BAD_REQUEST + headers +"\r\n");
                 writer.flush();
             } else {
                 try {
                     File fileName = new File(MAINPATH + file);
-                    FileReader fileReader = new FileReader(fileName);
-                    BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-                    int length = httpReader.readContentLength(fileName);
-                    char[] fileRead = new char[length];
-                    String content = httpReader.readContentType(file);
+                    if(fileName.canRead()){
+                        FileReader fileReader = new FileReader(fileName);
+                        BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-                    bufferedReader.read(fileRead);
+                        int length = HttpReader.readContentLength(fileName);
+                        String contentType = HttpReader.readContentType(file);
 
-                    writer.write(CODE_OK);
-                    writer.write("\r\n");
+                        char[] fileRead = new char[length];
+                        bufferedReader.read(fileRead);
 
-                    writer.write(CODE_OK);
-//                    How to get user-agent in the headers?
-//                    writer.write("User-Agent: " + useragent + "\n");
-                    writer.write("Content-Length: " + length + "\n");
-                    writer.write("Content-Type: " + content + "\n" + "\n");
-                    writer.write(fileRead);
+                        respone += CODE_OK + headers;
+                        respone += "Content-Length: " + length + "\nContent-Type: " + contentType + "\n\r\n";
+
+
+                        writer.write(respone);
+                        writer.write(fileRead);
+                        fileReader.close();
+                        bufferedReader.close();
+                    } else {
+                        writer.write(CODE_FORBIDDEN + headers +"\r\n");
+                    }
 
                     writer.flush();
-                    fileReader.close();
-                    bufferedReader.close();
+
                 } catch (FileNotFoundException e) {
-                    writer.write(CODE_NOT_FOUND + "\r\n");
-                    writer.write(CODE_NOT_FOUND);
+                    writer.write(CODE_NOT_FOUND + headers +"\r\n");
                     writer.flush();
                 }
             }
@@ -171,10 +196,12 @@ public class httpfs {
     }
 
     private void postFile(String file, Writer writer, BufferedReader reader) {
+
         try {
             File fileName = new File(MAINPATH + file);
-            int length = httpReader.readContentLength(fileName);
             FileWriter newFile = new FileWriter(MAINPATH + file);
+
+            int length = HttpReader.readContentLength(fileName);
 
             String line = reader.readLine();
             while (!line.isEmpty()) {
@@ -183,12 +210,12 @@ public class httpfs {
                 newFile.write(fileToWrite);
             }
 
-            writer.write(CODE_CREATED + "\r\n");
-            writer.write(CODE_CREATED);
+            writer.write(CODE_CREATED + headers + "\r\n");
 
             writer.flush();
             reader.close();
             newFile.close();
+
         } catch (IOException e) {
             System.out.print(e.getMessage());
         }

@@ -1,14 +1,12 @@
 package com.http.httpc;
 
 import com.http.network.exception.InvalidRequestException;
-import com.http.network.file.HttpReader;
 import com.http.network.request.*;
 import com.http.network.request.Request.RequestType;
 import com.http.network.response.Response;
 
 public class httpc {
 
-    private static boolean useHttpfs = false;
 
     public static void main(String[] args) {
         Request request = null;
@@ -29,33 +27,19 @@ public class httpc {
                     help("help");
                 }
             }
-            /**
-             * Check for httpfs use
-             */
-            if (HttpReader.readContentType(args[1]) != null) {
-                useHttpfs = true;
-            }
 
             /**
              * Curl Command
              */
             if (args[0].toLowerCase().equals("post")) {
-                requestType = RequestType.POST;
 
-                if (useHttpfs) {
-                    request = new FilePostRequest(args, requestType);
-                } else {
-                    request = new PostRequest(args, requestType);
-                }
+                requestType = RequestType.POST;
+                request = new PostRequest(args, requestType);
 
             } else if (args[0].toLowerCase().equals("get")) {
                 requestType = RequestType.GET;
+                request = new GetRequest(args, requestType);
 
-                if (useHttpfs) {
-                    request = new FileGetRequest(args, requestType);
-                } else {
-                    request = new GetRequest(args, requestType);
-                }
             }
 
             /**
