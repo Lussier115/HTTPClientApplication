@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class RequestHandler {
 
-    private final int PORT = 8080;
+    private final int PORT = 80;
     private static Response response;
 
     public RequestHandler() {
@@ -22,8 +22,14 @@ public class RequestHandler {
             throw new Exception();
 
         // Open Socket
+        int port = PORT;
+
+        if(request.getPort() != -1){
+            port = request.getPort();
+        }
+
         InetAddress addressIp = InetAddress.getByName(request.getHost());
-        Socket socket = new Socket(addressIp, PORT);
+        Socket socket = new Socket(addressIp, port);
 
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         Scanner in = new Scanner(socket.getInputStream());

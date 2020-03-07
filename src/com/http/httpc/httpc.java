@@ -1,7 +1,6 @@
 package com.http.httpc;
 
 import com.http.network.exception.InvalidRequestException;
-import com.http.network.file.HttpReader;
 import com.http.network.request.*;
 import com.http.network.request.Request.RequestType;
 import com.http.network.response.Response;
@@ -33,14 +32,12 @@ public class httpc {
              * Curl Command
              */
             if (args[0].toLowerCase().equals("post")) {
-
                 requestType = RequestType.POST;
                 request = new PostRequest(args, requestType);
 
             } else if (args[0].toLowerCase().equals("get")) {
                 requestType = RequestType.GET;
                 request = new GetRequest(args, requestType);
-
             }
 
             /**

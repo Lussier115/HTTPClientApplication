@@ -12,6 +12,7 @@ public class Request {
     protected String version = "HTTP/1.0";
     protected String url;
     protected String host;
+    protected int port;
     protected RequestType requestType;
     protected HttpHeader headers;
 
@@ -69,6 +70,10 @@ public class Request {
         return this.host;
     }
 
+    public int getPort(){
+        return this.port;
+    }
+
     protected void parseRequest(String[] args) throws InvalidRequestException {
         this.headers = new HttpHeader();
         int urlOffset = 1;
@@ -105,6 +110,7 @@ public class Request {
                     URL url = new URL(tempURL);
                     this.host = url.getHost();
                     this.url = tempURL;
+                    this.port = url.getPort();
 
                 } catch (MalformedURLException e) {
                     // it wasn't a URL
