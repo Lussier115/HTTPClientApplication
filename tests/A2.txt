@@ -1,0 +1,20 @@
+GET -v http://localhost:8080/
+GET -v http://localhost:8080//
+GET -v http://localhost:8080/doesNotExist
+
+
+GET -v http://localhost:8080/foo.html
+POST -h Content-Length:30 -d -v {"foo file has been overwritten!"} http://localhost:8080/foo.html
+GET -v http://localhost:8080/foo.html
+
+
+POST -h Content-Length:20 -d -v {"This is a text file."} http://localhost:8080/textFile.txt
+GET -v http://localhost:8080/textFile.txt
+
+
+POST -h Content-Length:19 -d -v {"This is a xml file."} http://localhost:8080/xmlFile.xml
+GET -v http://localhost:8080/xmlFile.xml
+
+
+POST -h Content-Length:20 -d -v {"This is a json file."} http://localhost:8080/jsonFile.json
+GET -v http://localhost:8080/jsonFile.json
